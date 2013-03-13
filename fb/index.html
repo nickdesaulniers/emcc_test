@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Hello world</title>
+  </head>
+  <body>
+    <div id="fb-root"></div>
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '121149628072364', //'YOUR_APP_ID', // App ID
+          //channelUrl : '//WWW.lostoracle.net/channel.html', // Channel File
+          status     : true, // check login status
+          cookie     : true, // enable cookies to allow the server to access the session
+          xfbml      : true  // parse XFBML
+        });
+
+        //FB.Event.subscribe('auth.statusChange', handleStatusChange);
+
+        // load the compiled script after
+        var js = document.createElement('script');
+        js.src = "a.out.js";
+        document.body.appendChild(js);
+      };
+
+      // Load the SDK Asynchronously
+      (function(d){
+        var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement('script'); js.id = id; js.async = true;
+        js.src = "http://connect.facebook.net/en_US/all.js";
+        ref.parentNode.insertBefore(js, ref);
+      }(document));
+
+      function publishStory(message) {
+        console.log("in publishStory, message: " + message);
+        // calling the API ...
+        var obj = {
+            method: 'feed',
+            redirect_uri: 'http://lostoracle.net',
+            link: 'https://github.com/kripken/emscripten',
+            picture: 'https://a248.e.akamai.net/camo.github.com/b13f9c10472ae855af98d549d5bb47c3b3ec486c/687474703a2f2f646c2e64726f70626f782e636f6d2f752f38303636343934362f656d736372697074656e5f6c6f676f2e6a7067',
+            name: message,
+            caption: 'But there is no FB C/C++ SDK!',
+            description: 'Thats why you compile your C/C++ code through emscripten and use the FB JS SDK!'
+        };
+
+        function callback(response) {
+          console.log("Post ID: " + response['post_id']);
+        }
+
+        FB.ui(obj, callback);
+      }
+    </script>
+
+    <div id="logout">
+      <p><button  onClick="FB.logout();">Logout</button></p>
+    </div>
+  </body>
+</html>
