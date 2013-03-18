@@ -1,2 +1,2 @@
 app:
-	emcc app.c --js-library libapp.js
+	emcc app.c --js-library libapp.js -O3
