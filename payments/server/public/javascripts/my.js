@@ -1,12 +1,11 @@
 window.addEventListener('DOMContentLoaded', function () {
-  var token = null,
-      socket = io.connect(window.location.origin),
+  var socket = io.connect(window.location.origin),
       requestTokenLock = false,
       requestToken = function (cb) {
         if (!requestTokenLock) {
           requestTokenLock = true;
-          socket.once('tokenResponse', function (data) {
-            cb(data);
+          socket.once('tokenResponse', function (token) {
+            cb(token);
             requestTokenLock = false;
           });
           socket.emit('tokenRequest');
