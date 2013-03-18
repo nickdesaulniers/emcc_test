@@ -985,13 +985,7 @@ Module["preloadedAudios"] = {}; // maps url to audio data
       FUNCTION_TABLE[cbPtr](data);
     });
   }
-
-  function _log_to_screen(msg) {
-    var msgEle = document.getElementById('msg');
-    var p = document.createElement('p');
-    p.appendChild(document.createTextNode(msg));
-    msgEle.insertBefore(p, msgEle.firstElementChild);
-  }
+var _draw_image; // stub for _draw_image
 
   function _memcpy(dest, src, num) {
       dest = dest|0; src = src|0; num = num|0;
@@ -1354,7 +1348,7 @@ Module["requestFullScreen"] = function() { Browser.requestFullScreen() };
   
 
 
-var FUNCTION_TABLE = [0,0,_log_to_screen,0];
+var FUNCTION_TABLE = [0,0,_draw_image,0];
 
 function _main() {
   _pay(2);
