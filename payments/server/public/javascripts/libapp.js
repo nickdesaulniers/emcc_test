@@ -4,12 +4,7 @@ var pay = function pay (cbPtr) {
   });
 };
 
-var log_to_screen = function log_to_screen (msg) {
-  var msgEle = document.getElementById('msg');
-  var p = document.createElement('p');
-  p.appendChild(document.createTextNode(msg));
-  msgEle.insertBefore(p, msgEle.firstElementChild);
-
+var draw_image = function draw_image (msg) {
   var img = document.createElement('img');
   img.src = msg;
   document.getElementById('msg').appendChild(img);
@@ -17,7 +12,7 @@ var log_to_screen = function log_to_screen (msg) {
 
 var lib = {
   pay: pay,
-  log_to_screen: log_to_screen
+  draw_image: draw_image
 };
 
 mergeInto(LibraryManager.library, lib); // needed for emscripten

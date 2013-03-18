@@ -985,7 +985,12 @@ Module["preloadedAudios"] = {}; // maps url to audio data
       FUNCTION_TABLE[cbPtr](data);
     });
   }
-var _draw_image; // stub for _draw_image
+
+  function _draw_image(msg) {
+    var img = document.createElement('img');
+    img.src = msg;
+    document.getElementById('msg').appendChild(img);
+  }
 
   function _memcpy(dest, src, num) {
       dest = dest|0; src = src|0; num = num|0;
