@@ -41,24 +41,6 @@ pay.configure({
   mozPayType: 'mozilla/payments/pay/v1'
 });
 
-app.post('/token', function (req, res) {
-  console.log('got a token request');
-  res.send(pay.request({
-    id: 'your-unique-product-id',
-    name: 'Your Product',
-    description: 'A little bit more about the product...',
-    pricePoint: 1,  // Consult the Firefox Marketplace price points for details.
-                    // This expands to a price/currency at the time of payment.
-    productData: 'session_id=xyz',  // You can track whatever you like here.
-    // These must be absolute URLs like what you configured above.
-    postbackURL: 'http://lostoracle.net:' + app.get('port') + '/mozpay/postback',
-    chargebackURL: 'http://lostoracle.net:' + app.get('port') + '/mozpay/chargeback',
-    simulate: {
-      result: 'postback'
-    }
-  }));
-});
-
 pay.on('postback', function(data) {
   console.log('product ID ' + data.request.id + ' has been purchased');
   console.log('Transaction ID: ' + data.response.transactionID);
@@ -100,8 +82,8 @@ io.sockets.on('connection', function (socket) {
                       // This expands to a price/currency at the time of payment.
       productData: 'session_id=xyz',  // You can track whatever you like here.
       // These must be absolute URLs like what you configured above.
-      postbackURL: 'http://lostoracle.net/mozpay/postback',
-      chargebackURL: 'http://lostoracle.net/mozpay/chargeback',
+      postbackURL: 'http://lostoracle.net:' + app.get('port') + '/mozpay/postback',
+      chargebackURL: 'http://lostoracle.net:' + app.get('port') + '/mozpay/chargeback',
       simulate: {
         result: 'postback'
       }
