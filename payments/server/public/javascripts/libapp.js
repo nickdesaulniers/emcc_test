@@ -5,6 +5,11 @@ var pay = function pay (cbPtr) {
 };
 
 var log_to_screen = function log_to_screen (msg) {
+  var msgEle = document.getElementById('msg');
+  var p = document.createElement('p');
+  p.appendChild(document.createTextNode(msg));
+  msgEle.insertBefore(p, msgEle.firstElementChild);
+
   var img = document.createElement('img');
   img.src = msg;
   document.getElementById('msg').appendChild(img);
