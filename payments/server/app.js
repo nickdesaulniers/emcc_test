@@ -46,10 +46,10 @@ pay.on('postback', function(data) {
   console.log('product ID ' + data.request.id + ' has been purchased');
   console.log('Transaction ID: ' + data.response.transactionID);
 
-  var pendingTransactionSocket = pendingTransactions[data.response.transactionID];
+  var pendingTransactionSocket = pendingTransactions[data.request.pendingTransactionID];
   if (pendingTransactionSocket) {
     pendingTransactionSocket.emit('postback', 'the secret is ' + Math.PI + '!');
-    delete pendingTransactions[data.response.transactionID];
+    delete pendingTransactions[data.request.pendingTransactionID];
     console.log("Sent secret and deleted pending transaction");
   } else {
     console.log("No pending transaction with that transaction ID");
@@ -90,7 +90,7 @@ io.sockets.on('connection', function (socket) {
 
     console.log('got a token request');
     socket.emit('tokenResponse', pay.request({
-      id: transactionID,
+      id: '42',
       name: 'Mecha Raptor Jesus',
       description: 'A little bit more about the product...',
       pricePoint: 1,  // Consult the Firefox Marketplace price points for details.
@@ -99,9 +99,12 @@ io.sockets.on('connection', function (socket) {
       // These must be absolute URLs like what you configured above.
       postbackURL: 'http://lostoracle.net:' + app.get('port') + '/mozpay/postback',
       chargebackURL: 'http://lostoracle.net:' + app.get('port') + '/mozpay/chargeback',
+      // Added for simulation
       simulate: {
         result: 'postback'
-      }
+      },
+      // Added for pending transaction map
+      pendingTransactionID: transactionID
     }));
 
     pendingTransactions[transactionID] = socket;
