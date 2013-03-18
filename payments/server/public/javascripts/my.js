@@ -12,15 +12,6 @@ window.addEventListener('DOMContentLoaded', function () {
         p.appendChild(document.createTextNode(msg));
         msgEle.insertBefore(p, msgEle.firstElementChild);
       },
-      ajaxPost = function (loc, cb) {
-        var xhr = new XMLHttpRequest();
-        xhr.onload = cb;
-        xhr.open('POST', loc);
-        xhr.send();
-      },
-      wsRequest = function (cb) {
-        
-      },
       requestToken = function (cb) {
         if (!requestTokenLock) {
           requestTokenLock = true;
@@ -29,7 +20,6 @@ window.addEventListener('DOMContentLoaded', function () {
             requestTokenLock = false;
           });
           socket.emit('tokenRequest');
-          log('emitted tokenRequest');
         }
       };
 
@@ -42,9 +32,7 @@ window.addEventListener('DOMContentLoaded', function () {
   });
 
   getTokenEle.addEventListener('click', function () {
-    log('Requesting token');
     requestToken(function (data) {
-      log(data);
       token = data;
       getPostbackEle.removeAttribute('disabled');
     });
@@ -52,15 +40,11 @@ window.addEventListener('DOMContentLoaded', function () {
 
   getPostbackEle.addEventListener('click', function () {
     getPostbackEle.setAttribute('disabled', 'true');
-    log('Requesting mozPay');
     try {
       var request = navigator.mozPay([token]);
       request.onsuccess = function() {
-        log('navigator.mozPay() finished');
-        // The product has not yet been bought!
-        // Poll your server until a valid postback has been received.
-        //waitForPostback();
-      }
+        // navigator.mozPay() finished
+      };
       request.onerror = function() {
         log('navigator.mozPay() error: ' + this.error.name);
       };
