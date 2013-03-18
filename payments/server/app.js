@@ -9,6 +9,7 @@ var express = require('express')
   , user = require('./routes/user')
   , http = require('http')
   , path = require('path')
+  , uuid = require('node-uuid')
   , pay = require('mozpay');
 
 //var app = express();
@@ -44,9 +45,19 @@ pay.configure({
 pay.on('postback', function(data) {
   console.log('product ID ' + data.request.id + ' has been purchased');
   console.log('Transaction ID: ' + data.response.transactionID);
+
+  var pendingTransactionSocket = pendingTransactions[data.response.transactionID];
+  if (pendingTransactionSocket) {
+    pendingTransactionSocket.emit('postback', 'the secret is ' + Math.PI + '!');
+    delete pendingTransactions[data.response.transactionID];
+    console.log("Sent secret and deleted pending transaction");
+  } else {
+    console.log("No pending transaction with that transaction ID");
+  }
 });
 
 pay.on('chargeback', function(data) {
+  // TODO: delete pending transactions
   console.log('product ID ' + data.request.id + ' failed');
   console.log('reason: ' + data.response.reason);
   console.log('Transaction ID: ' + data.response.transactionID);
@@ -67,16 +78,20 @@ var server = http.createServer(app).listen(app.get('port'), function(){
 
 var io = require('socket.io').listen(server);
 
-//io.set('log level', 0);
+io.set('log level', 0);
+
+var pendingTransactions = {};
 
 io.sockets.on('connection', function (socket) {
   console.log('connection received');
 
   socket.on('tokenRequest', function () {
+    var transactionID = uuid.v4();
+
     console.log('got a token request');
     socket.emit('tokenResponse', pay.request({
-      id: 'your-unique-product-id',
-      name: 'Your Product',
+      id: transactionID,
+      name: 'Mecha Raptor Jesus',
       description: 'A little bit more about the product...',
       pricePoint: 1,  // Consult the Firefox Marketplace price points for details.
                       // This expands to a price/currency at the time of payment.
@@ -88,6 +103,8 @@ io.sockets.on('connection', function (socket) {
         result: 'postback'
       }
     }));
+
+    pendingTransactions[transactionID] = socket;
   });
 });
 

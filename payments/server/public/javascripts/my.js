@@ -37,6 +37,10 @@ window.addEventListener('DOMContentLoaded', function () {
     log('ws connection established');
   });
 
+  socket.on('postback', function (data) {
+    log(data);
+  });
+
   getTokenEle.addEventListener('click', function () {
     log('Requesting token');
     requestToken(function (data) {
