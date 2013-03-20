@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JavaScript Visualization Example</title>
+    <meta charset="utf-8"/>
+  </head>
+  <body>
+    <!--<audio id="audio-element" src="lateralus_clip.ogg" controls="true" style="width: 512px;"></audio>-->
+    <pre id="raw">hello</pre>
+    <script>
+      function loadedMetadata() {
+        channels = audio.mozChannels;
+        rate = audio.mozSampleRate;
+        frameBufferLength = audio.mozFrameBufferLength;
+        console.log("channels: " + channels);
+        console.log("rate: " + rate);
+        console.log("frameBufferLength: " + frameBufferLength);
+      }
+
+      function audioAvailable(event) {
+        var frameBuffer = event.frameBuffer;
+        var t = event.time;
+        var text = "Samples at: " + t + "\n";
+        text += frameBuffer[0] + "  " + frameBuffer[1]; // there are 2048
+        raw.innerHTML = text;
+      }
+
+      var raw = document.getElementById('raw')
+      var audio = new Audio();
+      audio.setAttribute('controls', true);
+      audio.style.width = '512px';
+      audio.src = 'lateralus_clip.ogg';
+
+      audio.addEventListener('MozAudioAvailable', audioAvailable);
+      audio.addEventListener('loadedmetadata', loadedMetadata);
+      document.body.appendChild(audio);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <meta charset="utf-8"/>
+  <script type="application/javascript;version=1.8">
+    window.addEventListener('DOMContentLoaded', function () {
+      let $ = document.getElementById.bind(document),
+          player = document.createElement('audio'),
+          loadEle = $('load'),
+          playEle = $('play'),
+          pauseEle = $('pause'),
+          objectURL = null;
+
+      loadEle.addEventListener('click', function () {
+        let request = new XMLHttpRequest();
+        request.open('GET', window.location.origin + '/lateralus_clip.ogg');
+        //request.responseType = 'blob';
+        request.responseType = 'arraybuffer';
+        request.addEventListener('load', function (e) {
+          let arrayBuffer = request.response;
+          console.log(arrayBuffer);
+
+          //let blob = request.response;
+          let blob = new Blob([arrayBuffer], { type: 'audio/ogg' });
+          console.log(blob.size, blob.type);
+
+          URL.revokeObjectURL(objectURL);
+          objectURL = URL.createObjectURL(blob);
+          console.log(objectURL);
+
+          player.src = objectURL;
+
+          playEle.removeAttribute('disabled');
+          pauseEle.removeAttribute('disabled');
+
+          console.log(player, player.src);
+        });
+        request.send(null);
+      });
+
+      playEle.addEventListener('click', function () {
+        player.play();
+      });
+
+
+      pauseEle.addEventListener('click', function () {
+        player.pause();
+      });
+    });
+  </script>
+</head>
+<body>
+  <button id="load">Load</button>
+  <button id="play" disabled="true">Play</button>
+  <button id="pause" disabled="true">Pause</button>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Generating audio in real time</title>
+    <script type="text/javascript">
+      function playTone() {
+        var output = new Audio();
+        output.mozSetup(1, 44100);
+        var samples = new Float32Array(22050);
+
+        for (var i = 0; i < samples.length ; i++) {
+          samples[i] = Math.sin( i / 20 );
+        }
+        output.mozWriteAudio(samples);
+      }
+    </script>
+  </head>
+  <body>
+    <p>This demo plays a one second tone when you click the button below.</p>
+    <button onclick="playTone();">Play</button>
+  </body>
+</html>

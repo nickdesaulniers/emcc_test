@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Guide to HTML5 video: chapter 8: example 5</title>
+  </head>
+  <body>
+    <audio src="lateralus_clip.ogg" controls="controls"></audio>
+    <canvas width="512" height="200" style="background-color:orange;"></canvas>
+    <script>
+      // This example was taken and modified from
+      // http://html5videoguide.net/chapter8.html
+      var audio = document.getElementsByTagName("audio")[0];
+      var canvas = document.getElementsByTagName("canvas")[0];
+      var context = canvas.getContext('2d');
+      context.strokeStyle = "#FFFFFF";
+      context.lineWidth = 2;
+      audio.addEventListener("MozAudioAvailable", writeSamples, false);
+      audio.addEventListener("loadedmetadata", getMetadata, false);
+      var fbLength, channels;
+      function getMetadata() {
+        channels = audio.mozChannels;
+        fbLength = audio.mozFrameBufferLength;
+      }
+      // Render the waveform
+      function writeSamples (event){
+        var data = event.frameBuffer;
+        var samples = 512;
+        var step = (fbLength / channels) / samples;
+        context.fillRect(0, 0, 512, 200);
+        context.beginPath();
+        context.moveTo(0, 100-data[0]*100);
+        for(var i=1; i< samples; i++){
+          context.lineTo(i, 100-data[i*step]*100);
+        }
+        context.stroke();
+      }
+    </script>
+  </body>
+</html>

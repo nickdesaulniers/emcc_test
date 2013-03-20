@@ -1,0 +1,9 @@
+https://developer.mozilla.org/en-US/docs/Using_files_from_web_applications#Example.3A_Using_object_URLs_with_other_file_types
+
+https://developer.mozilla.org/en-US/docs/DOM/FileReader
+
+https://developer.mozilla.org/en-US/docs/DOM/window.URL.createObjectURL
+
+https://developer.mozilla.org/en-US/docs/DOM/Blob
+
+https://developer.mozilla.org/en-US/docs/DOM/XMLHttpRequest/Sending_and_Receiving_Binary_Data
